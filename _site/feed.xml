@@ -5,9 +5,254 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 30 Aug 2020 21:29:01 +0800</pubDate>
-    <lastBuildDate>Sun, 30 Aug 2020 21:29:01 +0800</lastBuildDate>
+    <pubDate>Sun, 30 Aug 2020 21:29:52 +0800</pubDate>
+    <lastBuildDate>Sun, 30 Aug 2020 21:29:52 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Principle Component Analysis Tutorial</title>
+        <description>&lt;h1 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;via Principle Component Analysis&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.&lt;br /&gt;
+Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Principle Component Analysis (PCA)&lt;/strong&gt; aims to find the &lt;em&gt;directions&lt;/em&gt; of &lt;strong&gt;maximum variance&lt;/strong&gt; in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.&lt;br /&gt;
+The orthogonal axes (principle components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are &lt;strong&gt;orthogonal&lt;/strong&gt; to each other.&lt;br /&gt;
+(&lt;em&gt;orthogonal means uncorrelated&lt;/em&gt;)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;What is an orthogonal matrix?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Say we have:&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;a_1^2 + a_2^2=1&lt;/script&gt; &lt;br /&gt;
+  &lt;script type=&quot;math/tex&quot;&gt;b_1^2 + b_2^2=1&lt;/script&gt;  &lt;br /&gt;
+  &lt;script type=&quot;math/tex&quot;&gt;a_1 b_1 + a_2 b_2=0&lt;/script&gt; &lt;br /&gt;
+  &lt;script type=&quot;math/tex&quot;&gt;b_1 a_1 + b_2 a_2=0&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;that is:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix} \begin{bmatrix} a_1 &amp; b_1\\a_2 &amp; b_2 \end{bmatrix} =
+  \begin{bmatrix} 1 &amp; 0\\ 0 &amp; 1 \end{bmatrix} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
+A = \begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix} %]]&gt;&lt;/script&gt;&lt;br /&gt;
+     &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
+{A^T}= \begin{bmatrix} a_1 &amp; b_1\\ a_2 &amp; b_2 \end{bmatrix} %]]&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;AA^T = I&lt;/script&gt;
+
+&lt;p&gt;Then A is an orthogonal matrix.&lt;/p&gt;
+
+&lt;h1 id=&quot;extracting-the-principle-components-step-by-step&quot;&gt;Extracting the principle components step by step&lt;/h1&gt;
+
+&lt;h1 id=&quot;1standardizing-the-data&quot;&gt;1.Standardizing the data&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;PCA directions are highly sensitive to data scaling. We need to standardize the features &lt;strong&gt;prior&lt;/strong&gt; to PCA.&lt;/li&gt;
+  &lt;li&gt;We will start by loading the Wine datase from:
+https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;df_wine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'https://archive.ics.uci.edu/ml/'&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;'machine-learning-databases/wine/wine.data'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;df_wine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div&gt;
+&lt;style scoped=&quot;&quot;&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;th&gt;5&lt;/th&gt;
+      &lt;th&gt;6&lt;/th&gt;
+      &lt;th&gt;7&lt;/th&gt;
+      &lt;th&gt;8&lt;/th&gt;
+      &lt;th&gt;9&lt;/th&gt;
+      &lt;th&gt;10&lt;/th&gt;
+      &lt;th&gt;11&lt;/th&gt;
+      &lt;th&gt;12&lt;/th&gt;
+      &lt;th&gt;13&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;th&gt;0&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;14.23&lt;/td&gt;
+      &lt;td&gt;1.71&lt;/td&gt;
+      &lt;td&gt;2.43&lt;/td&gt;
+      &lt;td&gt;15.6&lt;/td&gt;
+      &lt;td&gt;127&lt;/td&gt;
+      &lt;td&gt;2.80&lt;/td&gt;
+      &lt;td&gt;3.06&lt;/td&gt;
+      &lt;td&gt;0.28&lt;/td&gt;
+      &lt;td&gt;2.29&lt;/td&gt;
+      &lt;td&gt;5.64&lt;/td&gt;
+      &lt;td&gt;1.04&lt;/td&gt;
+      &lt;td&gt;3.92&lt;/td&gt;
+      &lt;td&gt;1065&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;1&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;13.20&lt;/td&gt;
+      &lt;td&gt;1.78&lt;/td&gt;
+      &lt;td&gt;2.14&lt;/td&gt;
+      &lt;td&gt;11.2&lt;/td&gt;
+      &lt;td&gt;100&lt;/td&gt;
+      &lt;td&gt;2.65&lt;/td&gt;
+      &lt;td&gt;2.76&lt;/td&gt;
+      &lt;td&gt;0.26&lt;/td&gt;
+      &lt;td&gt;1.28&lt;/td&gt;
+      &lt;td&gt;4.38&lt;/td&gt;
+      &lt;td&gt;1.05&lt;/td&gt;
+      &lt;td&gt;3.40&lt;/td&gt;
+      &lt;td&gt;1050&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;2&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;13.16&lt;/td&gt;
+      &lt;td&gt;2.36&lt;/td&gt;
+      &lt;td&gt;2.67&lt;/td&gt;
+      &lt;td&gt;18.6&lt;/td&gt;
+      &lt;td&gt;101&lt;/td&gt;
+      &lt;td&gt;2.80&lt;/td&gt;
+      &lt;td&gt;3.24&lt;/td&gt;
+      &lt;td&gt;0.30&lt;/td&gt;
+      &lt;td&gt;2.81&lt;/td&gt;
+      &lt;td&gt;5.68&lt;/td&gt;
+      &lt;td&gt;1.03&lt;/td&gt;
+      &lt;td&gt;3.17&lt;/td&gt;
+      &lt;td&gt;1185&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;3&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;14.37&lt;/td&gt;
+      &lt;td&gt;1.95&lt;/td&gt;
+      &lt;td&gt;2.50&lt;/td&gt;
+      &lt;td&gt;16.8&lt;/td&gt;
+      &lt;td&gt;113&lt;/td&gt;
+      &lt;td&gt;3.85&lt;/td&gt;
+      &lt;td&gt;3.49&lt;/td&gt;
+      &lt;td&gt;0.24&lt;/td&gt;
+      &lt;td&gt;2.18&lt;/td&gt;
+      &lt;td&gt;7.80&lt;/td&gt;
+      &lt;td&gt;0.86&lt;/td&gt;
+      &lt;td&gt;3.45&lt;/td&gt;
+      &lt;td&gt;1480&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;4&lt;/th&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;13.24&lt;/td&gt;
+      &lt;td&gt;2.59&lt;/td&gt;
+      &lt;td&gt;2.87&lt;/td&gt;
+      &lt;td&gt;21.0&lt;/td&gt;
+      &lt;td&gt;118&lt;/td&gt;
+      &lt;td&gt;2.80&lt;/td&gt;
+      &lt;td&gt;2.69&lt;/td&gt;
+      &lt;td&gt;0.39&lt;/td&gt;
+      &lt;td&gt;1.82&lt;/td&gt;
+      &lt;td&gt;4.32&lt;/td&gt;
+      &lt;td&gt;1.04&lt;/td&gt;
+      &lt;td&gt;2.93&lt;/td&gt;
+      &lt;td&gt;735&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The first row is the label and the rest are features.&lt;/li&gt;
+  &lt;li&gt;Next, we process the Wine data into separate training and test sets—using 70 percent and 30 percent of the data.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn.model_selection&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;train_test_split&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df_wine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df_wine&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iloc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; \
+&lt;span class=&quot;n&quot;&gt;train_test_split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;stratify&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;n&quot;&gt;random_state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Standardize the features&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sklearn.preprocessing&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StandardScaler&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StandardScaler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;X_train_std&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;X_test_std&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;2-constructing-the-covariance-matrix&quot;&gt;2. Constructing the covariance matrix&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;The covariance between two features x&lt;sub&gt;i&lt;/sub&gt; and x&lt;sub&gt;j&lt;/sub&gt; on population level can be calculated as:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sigma_ij = \sum_{i=1}^{n}(x_j^{(i)} - \mu_j)(x_k^{(i)}-\mu_k)&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Since we already have standardized dataset, then covariance matrix can be calculated as:&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Sigma = \frac{1}{n}X X^T&lt;/script&gt;
+
+    &lt;p&gt;Where $\Sigma$ is the covariance matrix of features, $X$ is the feature matrix.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Why we need to calculate the covariance matrix for features?&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;The covariance matrix is calculating the correlation between the matrix.&lt;br /&gt;
+The goal of PCA can be interpreted as maximize the main diagonal (the covariance of feature and itself) while minimize  the rest of the diagonals (the covariance between different features).&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Sun, 30 Aug 2020 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2020/08/PCA/</link>
+        <guid isPermaLink="true">http://localhost:4000/2020/08/PCA/</guid>
+        
+        <category>Unsupervised</category>
+        
+        <category>Learning</category>
+        
+        
+      </item>
     
   </channel>
 </rss>
