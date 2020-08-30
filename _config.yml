@@ -1,11 +1,11 @@
 # Basic
 title: Zhou Wei
 subtitle: My journey to data science 👧🏽
-welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">Download the theme</a>
+#welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">Download the theme</a>
 description: ta-da! welcome to my blog! 
-creator: <a href="http://onev.cat">@onevcat</a>
+#creator: <a href="http://onev.cat">@onevcat</a>
 
-url: "http://vno.onevcat.com"
+url: "WZHOU007-0912.github.io"
 
 permalink: /:year/:month/:title/
 
@@ -13,7 +13,7 @@ permalink: /:year/:month/:title/
 highlighter: rouge
 
 # supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
-cover_color: red
+cover_color: 
 
 # The blog button should not be removed.
 blog_button:
@@ -37,11 +37,11 @@ comment:
     
 # Social
 social:
-    weibo: onevcat
-    github: onevcat
-    twitter: onevcat
-    gplus: 107108267983477358170
-    mail: onev@onevcat.com
+    #weibo: onevcat
+    #github: onevcat
+    #twitter: onevcat
+    #gplus: 107108267983477358170
+    mail: WZHOU007@e.ntu.edu.sg
 
 # Google Analytics
 ga:
