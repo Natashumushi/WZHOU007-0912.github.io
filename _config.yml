@@ -31,15 +31,15 @@ paginate: 10
 paginate_path: "page/:num/"
 
 # Comment
-#comment:
-    #disqus: vno-jekyll
+comment:
+    disqus: natasumushi
     # duoshuo: 
     
 # Social
 social:
-    #weibo: onevcat
-    #github: onevcat
-    #twitter: onevcat
+    weibo: Natasumushi
+    github: https://github.com/WZHOU007-0912
+    twitter: Natasumushi
     #gplus: 107108267983477358170
     mail: WZHOU007@e.ntu.edu.sg
 
