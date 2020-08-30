@@ -27,6 +27,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 teaser: /assets/images/sgnight.jpg
 
 
+github_username: WZHOU007-0912
 highlighter: rouge
 svg:
   optimize: true
@@ -34,8 +35,10 @@ svg:
 # theme: minima
 highlighter-theme: monokai
 date_format: "%Y-%M-%D"
-plugins: [jekyll-paginate, jekyll-jupyter-notebook]
+plugins:
+  - jekyll-feed
 category_dir: category/
+tag_dir: tag/
 #tag_dir: tag/
 
 # Exclude from processing.
