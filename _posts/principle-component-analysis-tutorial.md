@@ -1,3 +1,10 @@
+---
+layout: post
+title: Principle Component Analysis Tutorial
+date: 2020-08-30
+tags: Unsupervised Learning
+---
+
 # Unsupervised Dimentionality Reduction  
 **via Principle Component Analysis**
 
