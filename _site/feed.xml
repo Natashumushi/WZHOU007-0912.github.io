@@ -5,13 +5,13 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 30 Aug 2020 22:01:36 +0800</pubDate>
-    <lastBuildDate>Sun, 30 Aug 2020 22:01:36 +0800</lastBuildDate>
+    <pubDate>Sun, 30 Aug 2020 22:10:22 +0800</pubDate>
+    <lastBuildDate>Sun, 30 Aug 2020 22:10:22 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>Principle Component Analysis Tutorial</title>
-        <description>&lt;h1 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h1&gt;
+        <title>Principle Component Analysis</title>
+        <description>&lt;h2 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;via Principle Component Analysis&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.&lt;br /&gt;
@@ -31,10 +31,13 @@ The orthogonal axes (principle components) of the new subspace can be interprete
 
 &lt;p&gt;Say we have:&lt;/p&gt;
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;a_1^2 + a_2^2=1&lt;/script&gt; &lt;br /&gt;
-  &lt;script type=&quot;math/tex&quot;&gt;b_1^2 + b_2^2=1&lt;/script&gt;  &lt;br /&gt;
-  &lt;script type=&quot;math/tex&quot;&gt;a_1 b_1 + a_2 b_2=0&lt;/script&gt; &lt;br /&gt;
-  &lt;script type=&quot;math/tex&quot;&gt;b_1 a_1 + b_2 a_2=0&lt;/script&gt;&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;a_1^2 + a_2^2=1&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;b_1^2 + b_2^2=1&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;a_1 b_1 + a_2 b_2=0&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;b_1 a_1 + b_2 a_2=0&lt;/script&gt;
 
 &lt;p&gt;that is:&lt;/p&gt;
 
@@ -42,18 +45,16 @@ The orthogonal axes (principle components) of the new subspace can be interprete
 \begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix} \begin{bmatrix} a_1 &amp; b_1\\a_2 &amp; b_2 \end{bmatrix} =
   \begin{bmatrix} 1 &amp; 0\\ 0 &amp; 1 \end{bmatrix} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-A = \begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix} %]]&gt;&lt;/script&gt;&lt;br /&gt;
-     &lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-{A^T}= \begin{bmatrix} a_1 &amp; b_1\\ a_2 &amp; b_2 \end{bmatrix} %]]&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+for: A = \begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix}, {A^T}= \begin{bmatrix} a_1 &amp; b_1\\ a_2 &amp; b_2 \end{bmatrix}, I = \begin{bmatrix} 1 &amp; 0\\ 0 &amp; 1 \end{bmatrix} %]]&gt;&lt;/script&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;AA^T = I&lt;/script&gt;
 
-&lt;p&gt;Then A is an orthogonal matrix.&lt;/p&gt;
+&lt;p&gt;Then $A$ is an orthogonal matrix.&lt;/p&gt;
 
-&lt;h1 id=&quot;extracting-the-principle-components-step-by-step&quot;&gt;Extracting the principle components step by step&lt;/h1&gt;
+&lt;h2 id=&quot;extracting-the-principle-components-step-by-step&quot;&gt;Extracting the principle components step by step&lt;/h2&gt;
 
-&lt;h1 id=&quot;1standardizing-the-data&quot;&gt;1.Standardizing the data&lt;/h1&gt;
+&lt;h3 id=&quot;1-standardizing-the-data&quot;&gt;1. Standardizing the data&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;PCA directions are highly sensitive to data scaling. We need to standardize the features &lt;strong&gt;prior&lt;/strong&gt; to PCA.&lt;/li&gt;
   &lt;li&gt;We will start by loading the Wine datase from:
@@ -217,7 +218,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&lt;/li&
 &lt;span class=&quot;n&quot;&gt;X_test_std&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;2-constructing-the-covariance-matrix&quot;&gt;2. Constructing the covariance matrix&lt;/h1&gt;
+&lt;h2 id=&quot;2-constructing-the-covariance-matrix&quot;&gt;2. Constructing the covariance matrix&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;The covariance between two features x&lt;sub&gt;i&lt;/sub&gt; and x&lt;sub&gt;j&lt;/sub&gt; on population level can be calculated as:&lt;/li&gt;
 &lt;/ul&gt;
@@ -239,9 +240,6 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&lt;/li&
 The goal of PCA can be interpreted as maximize the main diagonal (the covariance of feature and itself) while minimize  the rest of the diagonals (the covariance between different features).&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Sun, 30 Aug 2020 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2020/08/PCA/</link>

@@ -6,16 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Principle Component Analysis Tutorial</title>
+  <title>Principle Component Analysis</title>
   <meta name="description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Principle Component Analysis Tutorial">
+  <meta name="twitter:title" content="Principle Component Analysis">
   <meta name="twitter:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Principle Component Analysis Tutorial">
+  <meta property="og:title" content="Principle Component Analysis">
   <meta property="og:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
@@ -131,11 +131,11 @@
     <div class="post-meta">
       <time datetime="2020-08-30 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2020-08-30</time> &#8226; <span class="post-meta__tags tags">Unsupervised Learning</span>
     </div>
-    <h1 class="post-title">Principle Component Analysis Tutorial</h1>
+    <h1 class="post-title">Principle Component Analysis</h1>
   </header>
 
   <section class="post">
-    <h1 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h1>
+    <h2 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h2>
 <p><strong>via Principle Component Analysis</strong></p>
 
 <p>In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.<br />
@@ -155,10 +155,13 @@ The orthogonal axes (principle components) of the new subspace can be interprete
 
 <p>Say we have:</p>
 
-<p><script type="math/tex">a_1^2 + a_2^2=1</script> <br />
-  <script type="math/tex">b_1^2 + b_2^2=1</script>  <br />
-  <script type="math/tex">a_1 b_1 + a_2 b_2=0</script> <br />
-  <script type="math/tex">b_1 a_1 + b_2 a_2=0</script></p>
+<script type="math/tex; mode=display">a_1^2 + a_2^2=1</script>
+
+<script type="math/tex; mode=display">b_1^2 + b_2^2=1</script>
+
+<script type="math/tex; mode=display">a_1 b_1 + a_2 b_2=0</script>
+
+<script type="math/tex; mode=display">b_1 a_1 + b_2 a_2=0</script>
 
 <p>that is:</p>
 
@@ -166,18 +169,16 @@ The orthogonal axes (principle components) of the new subspace can be interprete
 \begin{bmatrix} a_1 & a_2\\ b_1 & b_2 \end{bmatrix} \begin{bmatrix} a_1 & b_1\\a_2 & b_2 \end{bmatrix} =
   \begin{bmatrix} 1 & 0\\ 0 & 1 \end{bmatrix} %]]></script>
 
-<p>for <script type="math/tex">% <![CDATA[
-A = \begin{bmatrix} a_1 & a_2\\ b_1 & b_2 \end{bmatrix} %]]></script><br />
-     <script type="math/tex">% <![CDATA[
-{A^T}= \begin{bmatrix} a_1 & b_1\\ a_2 & b_2 \end{bmatrix} %]]></script></p>
+<script type="math/tex; mode=display">% <![CDATA[
+for: A = \begin{bmatrix} a_1 & a_2\\ b_1 & b_2 \end{bmatrix}, {A^T}= \begin{bmatrix} a_1 & b_1\\ a_2 & b_2 \end{bmatrix}, I = \begin{bmatrix} 1 & 0\\ 0 & 1 \end{bmatrix} %]]></script>
 
 <script type="math/tex; mode=display">AA^T = I</script>
 
-<p>Then A is an orthogonal matrix.</p>
+<p>Then $A$ is an orthogonal matrix.</p>
 
-<h1 id="extracting-the-principle-components-step-by-step">Extracting the principle components step by step</h1>
+<h2 id="extracting-the-principle-components-step-by-step">Extracting the principle components step by step</h2>
 
-<h1 id="1standardizing-the-data">1.Standardizing the data</h1>
+<h3 id="1-standardizing-the-data">1. Standardizing the data</h3>
 <ul>
   <li>PCA directions are highly sensitive to data scaling. We need to standardize the features <strong>prior</strong> to PCA.</li>
   <li>We will start by loading the Wine datase from:
@@ -341,7 +342,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data</li>
 <span class="n">X_test_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h1 id="2-constructing-the-covariance-matrix">2. Constructing the covariance matrix</h1>
+<h2 id="2-constructing-the-covariance-matrix">2. Constructing the covariance matrix</h2>
 <ul>
   <li>The covariance between two features x<sub>i</sub> and x<sub>j</sub> on population level can be calculated as:</li>
 </ul>
@@ -363,9 +364,6 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data</li>
 The goal of PCA can be interpreted as maximize the main diagonal (the covariance of feature and itself) while minimize  the rest of the diagonals (the covariance between different features).</p>
   </li>
 </ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-</code></pre></div></div>
 
   </section>
 </article>
