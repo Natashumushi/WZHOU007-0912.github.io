@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Principle Component Analysis</title>
+  <meta name="description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Principle Component Analysis">
+  <meta name="twitter:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Principle Component Analysis">
+  <meta property="og:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2020/08/PCA/">
+  <link rel="alternate" type="application/rss+xml" title="Zhou Wei" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Zhou Wei 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Zhou Wei logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Zhou Wei" class="blog-button">Zhou Wei</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">My journey to data science 👧🏽</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">ta-da! welcome to my blog!</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:WZHOU007@e.ntu.edu.sg" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-08-30 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2020-08-30</time> &#8226; <span class="post-meta__tags tags">Unsupervised Learning</span>
+    </div>
+    <h1 class="post-title">Principle Component Analysis</h1>
+  </header>
+
+  <section class="post">
+    <h1 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h1>
+<p><strong>via Principle Component Analysis</strong></p>
+
+<p>In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.<br />
+Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
+
+<blockquote>
+  <p>x<sub>1</sub>,x<sub>1</sub> are original feature axes, pc<sub>1</sub>,pc<sub>2</sub> are the principle components.</p>
+</blockquote>
+
+<p><strong>Principle Component Analysis (PCA)</strong> aims to find the <em>directions</em> of <strong>maximum variance</strong> in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.<br />
+The orthogonal axes (principle components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are <strong>orthogonal</strong> to each other.<br />
+(<em>orthogonal means uncorrelated</em>)</p>
+
+<ul>
+  <li>What is an orthogonal matrix?</li>
+</ul>
+
+<p>Say we have:</p>
+
+<p>a<sub>1</sub><sup>2</sup> + a<sub>2</sub><sup>2</sup>=1<br />
+  b<sub>1</sub><sup>2</sup> + b<sub>2</sub><sup>2</sup>=1<br />
+  a<sub>1</sub>b<sub>1</sub>+a<sub>2</sub>b<sub>2</sub>=0<br />
+  b<sub>1</sub>a<sub>1</sub>+b<sub>2</sub>a<sub>2</sub>=0</p>
+
+<p>that is:</p>
+
+<p>$\begin{bmatrix}
+   a_1 &amp; a_2<br />
+   b_1 &amp; b_2 <br />
+  \end{bmatrix} $ 
+  $\begin{bmatrix}
+   a_1 &amp; b_1<br />
+   a_2 &amp; b_2 <br />
+  \end{bmatrix} $
+  =
+  $\begin{bmatrix}
+   1 &amp; 0<br />
+   0 &amp; 1 <br />
+  \end{bmatrix} $</p>
+
+<p>for A =  $\begin{bmatrix}
+   a_1 &amp; a_2<br />
+   b_1 &amp; b_2 <br />
+  \end{bmatrix} $,  A<sup>’</sup> = $\begin{bmatrix}
+   a_1 &amp; b_1<br />
+   a_2 &amp; b_2 <br />
+  \end{bmatrix} $</p>
+
+<p>AA<sup>’</sup> = I</p>
+
+<p>Then A is an orthogonal matrix.</p>
+
+<h1 id="extracting-the-principle-components-step-by-step">Extracting the principle components step by step</h1>
+
+<h1 id="1standardizing-the-data">1.Standardizing the data</h1>
+<ul>
+  <li>PCA directions are highly sensitive to data scaling. We need to standardize the features <strong>prior</strong> to PCA.</li>
+  <li>We will start by loading the Wine datase from:
+https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data</li>
+</ul>
+
+<p>import pandas as pd</p>
+
+<p>df_wine = pd.read_csv(‘https://archive.ics.uci.edu/ml/’
+‘machine-learning-databases/wine/wine.data’, header=None)</p>
+
+<p>df_wine.head(5)</p>
+
+<ul>
+  <li>The first row is the label and the rest are features.</li>
+  <li>Next, we process the Wine data into separate training and test sets—using 70 percent and 30 percent of the data.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">df_wine</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df_wine</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> \
+<span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">stratify</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> 
+                <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Standardize the features</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">sc</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_train_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="2-constructing-the-covariance-matrix">2. Constructing the covariance matrix</h1>
+<ul>
+  <li>
+    <p>The covariance between two features x<sub>i</sub> and x<sub>j</sub> on population level can be calculated as:</p>
+
+    <p>$\sigma$<sub>ij</sub> = $\sum_{i=1}^{n} (x$<sub>j</sub><sup>(i)</sup> - $\mu$<sub>j</sub>)$(x$<sub>k</sub><sup>(i)</sup> - $\mu$<sub>k</sub>)</p>
+  </li>
+  <li>
+    <p>Since we already have standardized dataset, then covariance matrix can be calculated as:</p>
+
+    <p>$\Sigma$ = $\frac{1}{n}$X X<sup>T</sup></p>
+
+    <p>Where $\Sigma$ is the covariance matrix of features, X is the feature matrix.</p>
+  </li>
+  <li>
+    <p><strong>Why we need to calculate the covariance matrix for features?</strong></p>
+
+    <p>The covariance matrix is calculating the correlation between the matrix.<br />
+The goal of PCA can be interpreted as maximize the main diagonal (the covariance of feature and itself) while minimize  the rest of the diagonals (the covariance between different features).</p>
+  </li>
+</ul>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2020-08-30 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2020</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
