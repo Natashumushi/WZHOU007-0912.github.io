@@ -39,11 +39,11 @@ comment:
 social:
     weibo: Natasumushi
     github: https://github.com/WZHOU007-0912
-    twitter: Natasumushi
+    #twitter: onevcat
     #gplus: 107108267983477358170
     mail: WZHOU007@e.ntu.edu.sg
 
 # Google Analytics
-# ga:
+ga:
     # id: your_ga_id
     # host: your_host
