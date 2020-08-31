@@ -152,7 +152,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
 
 <blockquote>
-  <p><img src="https://github.com/WZHOU007-0912/images/blob/master/PCA%20index.png" alt="PCA" />
+  <p><img src="https://github.com/WZHOU007-0912/images/blob/master/pca.jpg" alt="PCA Index" />
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
 </blockquote>
 
@@ -439,7 +439,7 @@ Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Text(0.5, 0, 'Principle component index')
 </code></pre></div></div>
 
-<p><img src="output_19_1.png" alt="png" /></p>
+<p><img src="https://github.com/WZHOU007-0912/images/blob/master/PCA%20index.png" alt="" /></p>
 
 <p>We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.</p>
 
@@ -512,7 +512,7 @@ We can then visualize it in a 2-dimensional scatter plot.</li>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div></div>
 
-<p><img src="output_28_0.png" alt="png" /></p>
+<p><img src="https://github.com/WZHOU007-0912/images/blob/master/output_28_0.png" alt="" /></p>
 
 <ul>
   <li>We can see that the data spread more on pc1 (the first principle component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.</li>
@@ -575,7 +575,7 @@ We can then visualize it in a 2-dimensional scatter plot.</li>
 <span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_train_pca_sk</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p><img src="output_36_0.png" alt="png" /></p>
+<p><img src="https://github.com/WZHOU007-0912/images/blob/master/output_36_0.png" alt="" /></p>
 
 <p>Now let’s plot the decision regions of the logistic regression on the transformed test dataset.</p>
 
@@ -586,7 +586,7 @@ We can then visualize it in a 2-dimensional scatter plot.</li>
 <span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_test_pca_sk</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p><img src="output_38_0.png" alt="png" /></p>
+<p><img src="https://github.com/WZHOU007-0912/images/blob/master/output_38_0.png" alt="" /></p>
 
 <p>The result indicates that logistic regression performs quite well on this two-dimensional feature subspace.</p>
 
