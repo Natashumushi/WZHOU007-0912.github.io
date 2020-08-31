@@ -5,25 +5,13 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 10:26:52 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 10:26:52 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Aug 2020 10:36:39 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Aug 2020 10:36:39 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>Pca</title>
-        <description>&lt;head&gt;
-    &lt;script src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/x-mathjax-config&quot;&gt;
-        MathJax.Hub.Config({
-            tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-            inlineMath: [['$','$']]
-            }
-        });
-    &lt;/script&gt;
-&lt;/head&gt;
-
-&lt;h2 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h2&gt;
+        <title>Principle Component Analysis</title>
+        <description>&lt;h2 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;via Principle Component Analysis&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.&lt;br /&gt;
@@ -256,6 +244,10 @@ The goal of PCA can be interpreted as maximize the main diagonal (the covariance
         <pubDate>Sun, 30 Aug 2020 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2020/08/PCA/</link>
         <guid isPermaLink="true">http://localhost:4000/2020/08/PCA/</guid>
+        
+        <category>Unsupervised</category>
+        
+        <category>Learning</category>
         
         
       </item>
