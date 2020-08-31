@@ -152,7 +152,8 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
 
 <blockquote>
-  <p>$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
+  <p><img src="/Users/wei/Desktop/pca.png" alt="AltText" />
+$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
 </blockquote>
 
 <p><strong>Principle Component Analysis (PCA)</strong> aims to find the <em>directions</em> of <strong>maximum variance</strong> in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.<br />
@@ -371,9 +372,230 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data</li>
     <p><strong>Why we need to calculate the covariance matrix for features?</strong></p>
 
     <p>The covariance matrix is calculating the correlation between the matrix.<br />
-The goal of PCA can be interpreted as maximize the main diagonal (the covariance of feature and itself) while minimize  the rest of the diagonals (the covariance between different features).</p>
+The goal of PCA can be interpreted as maximize <strong>the main diagonal</strong> (the ‘covariance’ between the feature and itself, that is, the variance) while minimize the rest of the diagonals (the covariance between different features).</p>
+  </li>
+  <li>
+    <p><strong>Then why do we need to maximimze the variance?</strong><br />
+Note that variance is a measure of the “variability” of the data you have. When you extract the features from your dataset, you would want them to account for the most variability possible: hence the search for maximum variance, so that the <em>principle components</em> collect the most “uniqueness” from the data set.</p>
   </li>
 </ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># for numpy cov function, each row vector is a sample 
+# we need to transpose the matrix so that
+# the dataset is then become (n_samples, n_features)
+</span><span class="n">con_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X_train_std</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="3-obtaining-the-eigenvalues-and-eigenvectors">3. Obtaining the eigenvalues and eigenvectors</h1>
+<p><strong>of the covariance matrix</strong></p>
+
+<ul>
+  <li>
+    <p>Why eigenvalues/vectors?<br />
+PCA does not actually increase the variance of your data. Rather, it rotates the dataset in such a way as to align the directions in which it is spread out the most with the principal axes.<br />
+When you calculating the eigenvalues, you are actually trying to find a diagonal matrix which the entries outside <strong>the main diagonal</strong> are all zero:</p>
+
+    <p>$\begin{bmatrix}
+ \lambda_1 &amp; 0 &amp; 0 &amp; … &amp; 0<br />
+ 0 &amp; \lambda_2 &amp; 0 &amp; … &amp; 0 <br />
+ 0 &amp; 0 &amp; 0 &amp;… &amp; \lambda_n
+\end{bmatrix} $</p>
+
+    <p>where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principle components (the direction of maximum variance).</p>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigen_val</span><span class="p">,</span> <span class="n">eigen_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">con_mat</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'</span><span class="se">\n</span><span class="s">Eigenvalues </span><span class="se">\n</span><span class="si">%</span><span class="s">s'</span><span class="o">%</span><span class="n">eigen_val</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Eigenvalues 
+[4.84274532 2.41602459 1.54845825 0.96120438 0.84166161 0.6620634
+ 0.51828472 0.34650377 0.3131368  0.10754642 0.21357215 0.15362835
+ 0.1808613 ]
+</code></pre></div></div>
+
+<h1 id="4-sorting-the-eigenvalues">4. Sorting the eigenvalues</h1>
+<p><strong>by decreasing order to rank the eigenvectors</strong></p>
+
+<p>Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principle components) that contains most of the information(variance).<br />
+Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
+
+<p>$\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}$</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">eigen_val</span><span class="p">)</span>
+<span class="n">history</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="o">/</span><span class="n">tot</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+          <span class="nb">sorted</span><span class="p">(</span><span class="n">eigen_val</span><span class="p">,</span><span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)]</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span><span class="n">history</span><span class="p">,</span> <span class="n">align</span> <span class="o">=</span> <span class="s">'center'</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'hotpink'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Explained variance ratio'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Principle component index'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Text(0.5, 0, 'Principle component index')
+</code></pre></div></div>
+
+<p><img src="output_19_1.png" alt="png" /></p>
+
+<p>We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.</p>
+
+<h1 id="5-select-k-eigenvectors">5. Select K eigenvectors</h1>
+<p><strong>which correspond to K largest eigenvalues</strong></p>
+
+<p>K is the dimensionality of the new feature subspace.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigen_pair</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">eigen_val</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="n">eigen_vec</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eigen_val</span><span class="p">))]</span>
+
+<span class="n">eigen_pair</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h1 id="6-construct-a-projection-matrix-w">6. Construct a projection matrix W</h1>
+<p><strong>from K eigenvectors</strong></p>
+
+<p>Here we let k = 2 for convinience.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># np.hstack: split an array into 
+# multiple sub-arrays horizontally (column-wise)
+</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">eigen_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> 
+               <span class="n">eigen_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Matrix W:</span><span class="se">\n</span><span class="s">'</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Matrix W:
+ [[-0.13724218  0.50303478]
+ [ 0.24724326  0.16487119]
+ [-0.02545159  0.24456476]
+ [ 0.20694508 -0.11352904]
+ [-0.15436582  0.28974518]
+ [-0.39376952  0.05080104]
+ [-0.41735106 -0.02287338]
+ [ 0.30572896  0.09048885]
+ [-0.30668347  0.00835233]
+ [ 0.07554066  0.54977581]
+ [-0.32613263 -0.20716433]
+ [-0.36861022 -0.24902536]
+ [-0.29669651  0.38022942]]
+</code></pre></div></div>
+
+<h1 id="7-transform-the-features-using-matrix-w">7. Transform the features using matrix W</h1>
+<p><strong>to obtain the new K-dimensional feature subspace</strong></p>
+
+<p>$X^{‘} = XW $</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># dot:inner product
+</span><span class="n">X_train_pca</span> <span class="o">=</span> <span class="n">X_train_std</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">X_train_pca</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(124, 2)
+</code></pre></div></div>
+
+<ul>
+  <li>Now the transformed training set has been stored as 124 * 2-dimensionl matrix.<br />
+We can then visualize it in a 2-dimensional scatter plot.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s">'plum'</span><span class="p">,</span><span class="s">'khaki'</span><span class="p">,</span><span class="s">'turquoise'</span><span class="p">]</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s">'s'</span><span class="p">,</span><span class="s">'x'</span><span class="p">,</span><span class="s">'o'</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">l</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="n">colors</span><span class="p">,</span> <span class="n">markers</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X_train_pca</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="n">l</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="n">X_train_pca</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="n">m</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'PC 1'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'PC 2'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">'lower left'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="output_28_0.png" alt="png" /></p>
+
+<ul>
+  <li>We can see that the data spread more on pc1 (the first principle component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.</li>
+</ul>
+
+<hr />
+<h1 id="pca-in-scikit-learn">PCA in scikit-learn</h1>
+
+<p><strong>1. PAC transform the dataset</strong></p>
+
+<p><strong>2. Classify the transformed samples via logistic regression</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">X_train_pca_sk</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train_std</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">lr</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+<span class="n">lr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_pca_sk</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LogisticRegression()
+</code></pre></div></div>
+
+<p><strong>3. Visualize the decision regions</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
+
+<span class="k">def</span> <span class="nf">plot_decision_regions</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">classifier</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">0.02</span><span class="p">):</span>
+    <span class="c1"># setup marker generator and color map
+</span>    <span class="n">markers</span> <span class="o">=</span> <span class="p">(</span><span class="s">'s'</span><span class="p">,</span> <span class="s">'x'</span><span class="p">,</span> <span class="s">'o'</span><span class="p">,</span> <span class="s">'^'</span><span class="p">,</span> <span class="s">'v'</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s">'lightpink'</span><span class="p">,</span> <span class="s">'slateblue'</span><span class="p">,</span> <span class="s">'gold'</span><span class="p">,</span> <span class="s">'lightgreen'</span><span class="p">,</span> <span class="s">'lightcyan'</span><span class="p">)</span> 
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">))])</span>
+    
+    <span class="c1"># plot the decision surface
+</span>    <span class="n">x1_min</span><span class="p">,</span> <span class="n">x1_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nb">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> 
+    <span class="n">x2_min</span><span class="p">,</span> <span class="n">x2_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="nb">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">xx1</span><span class="p">,</span> <span class="n">xx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x1_min</span><span class="p">,</span> <span class="n">x1_max</span><span class="p">,</span> <span class="n">resolution</span><span class="p">),</span>
+                           <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x2_min</span><span class="p">,</span> <span class="n">x2_max</span><span class="p">,</span> <span class="n">resolution</span><span class="p">))</span> 
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xx1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">xx2</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx1</span><span class="p">,</span> <span class="n">xx2</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">xx1</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">xx1</span><span class="o">.</span><span class="nb">max</span><span class="p">())</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">xx2</span><span class="o">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">xx2</span><span class="o">.</span><span class="nb">max</span><span class="p">())</span>
+    
+    <span class="c1"># plot class samples
+</span>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">cl</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">cl</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'black'</span><span class="p">,</span> 
+                    <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">cl</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">matplotlib.axes._axes</span> <span class="kn">import</span> <span class="n">_log</span> <span class="k">as</span> <span class="n">matplotlib_axes_logger</span>
+<span class="n">matplotlib_axes_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s">'ERROR'</span><span class="p">)</span>
+
+<span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_train_pca_sk</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="output_36_0.png" alt="png" /></p>
+
+<p>Now let’s plot the decision regions of the logistic regression on the transformed test dataset.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># transform() : parameters generated from fit() method,
+# applied upon model to generate transformed data set.
+</span><span class="n">X_test_pca_sk</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test_std</span><span class="p">)</span>
+
+<span class="n">plot_decision_regions</span><span class="p">(</span><span class="n">X_test_pca_sk</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">classifier</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="output_38_0.png" alt="png" /></p>
+
+<p>The result indicates that logistic regression performs quite well on this two-dimensional feature subspace.</p>
+
+<hr />
+<h1 id="references">References</h1>
+<ol>
+  <li>Python Machine Learning - Second Edition</li>
+  <li>https://stackoverflow.com/questions/12395542/why-do-we-maximize-variance-during-principal-component-analysis</li>
+  <li>https://www.cnblogs.com/LittleHann/p/10859016.html#_label2</li>
+</ol>
 
   </section>
 </article>
