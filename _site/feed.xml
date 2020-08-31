@@ -5,8 +5,8 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 16:35:56 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 16:35:56 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Aug 2020 17:06:27 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Aug 2020 17:06:27 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -18,7 +18,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/blob/master/pca.jpg&quot; alt=&quot;PCA Index&quot; /&gt;
+  &lt;p&gt;&lt;img src=&quot;https://wzhou007-0912.github.io/assests/pca.jpg&quot; alt=&quot;PCA index&quot; /&gt;
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.&lt;/p&gt;
 &lt;/blockquote&gt;
 
