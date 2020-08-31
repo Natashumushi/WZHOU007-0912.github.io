@@ -5,8 +5,8 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 16:00:54 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 16:00:54 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Aug 2020 16:09:30 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Aug 2020 16:09:30 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -18,7 +18,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;/Users/wei/Desktop/pca.png&quot; alt=&quot;AltText&quot; /&gt;
+  &lt;p&gt;&lt;img src=&quot;https://wzhou007-0912.github.io//assets/screenshot/output_19_1.png&quot; alt=&quot;AltText&quot; /&gt;
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -263,11 +263,12 @@ Note that variance is a measure of the “variability” of the data you have. W
 PCA does not actually increase the variance of your data. Rather, it rotates the dataset in such a way as to align the directions in which it is spread out the most with the principal axes.&lt;br /&gt;
 When you calculating the eigenvalues, you are actually trying to find a diagonal matrix which the entries outside &lt;strong&gt;the main diagonal&lt;/strong&gt; are all zero:&lt;/p&gt;
 
-    &lt;p&gt;$\begin{bmatrix}
- \lambda_1 &amp;amp; 0 &amp;amp; 0 &amp;amp; … &amp;amp; 0&lt;br /&gt;
- 0 &amp;amp; \lambda_2 &amp;amp; 0 &amp;amp; … &amp;amp; 0 &lt;br /&gt;
- 0 &amp;amp; 0 &amp;amp; 0 &amp;amp;… &amp;amp; \lambda_n
-\end{bmatrix} $&lt;/p&gt;
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{bmatrix}
+ \lambda_1 &amp; 0 &amp; 0 &amp; ... &amp; 0\\
+ 0 &amp; \lambda_2 &amp; 0 &amp; ... &amp; 0 \\
+ 0 &amp; 0 &amp; 0 &amp;... &amp; \lambda_n
+\end{bmatrix} %]]&gt;&lt;/script&gt;
 
     &lt;p&gt;where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principle components (the direction of maximum variance).&lt;/p&gt;
   &lt;/li&gt;

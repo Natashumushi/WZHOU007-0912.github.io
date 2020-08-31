@@ -152,7 +152,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
 
 <blockquote>
-  <p><img src="/Users/wei/Desktop/pca.png" alt="AltText" />
+  <p><img src="https://wzhou007-0912.github.io//assets/screenshot/output_19_1.png" alt="AltText" />
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
 </blockquote>
 
@@ -397,11 +397,12 @@ Note that variance is a measure of the “variability” of the data you have. W
 PCA does not actually increase the variance of your data. Rather, it rotates the dataset in such a way as to align the directions in which it is spread out the most with the principal axes.<br />
 When you calculating the eigenvalues, you are actually trying to find a diagonal matrix which the entries outside <strong>the main diagonal</strong> are all zero:</p>
 
-    <p>$\begin{bmatrix}
- \lambda_1 &amp; 0 &amp; 0 &amp; … &amp; 0<br />
- 0 &amp; \lambda_2 &amp; 0 &amp; … &amp; 0 <br />
- 0 &amp; 0 &amp; 0 &amp;… &amp; \lambda_n
-\end{bmatrix} $</p>
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix}
+ \lambda_1 & 0 & 0 & ... & 0\\
+ 0 & \lambda_2 & 0 & ... & 0 \\
+ 0 & 0 & 0 &... & \lambda_n
+\end{bmatrix} %]]></script>
 
     <p>where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principle components (the direction of maximum variance).</p>
   </li>
