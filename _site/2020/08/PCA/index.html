@@ -2,21 +2,24 @@
 <html>
 
   <head>
+	<script type="text/javascript"
+	src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   <title>Principle Component Analysis</title>
-  <meta name="description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta name="description" content="        ">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Principle Component Analysis">
-  <meta name="twitter:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta name="twitter:description" content="        ">
   
   <meta property="og:type" content="article">
   <meta property="og:title" content="Principle Component Analysis">
-  <meta property="og:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta property="og:description" content="        ">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -28,15 +31,6 @@
   <link rel="alternate" type="application/rss+xml" title="Zhou Wei" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-        inlineMath: [['$','$']]
-      }
-    });
-  </script>
-  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
   
 </head>
 
@@ -79,7 +73,23 @@
   <ul class="navigation">
 
   
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/natasumushi" title="@natasumushi 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
 
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/WZHOU007-0912" title="@WZHOU007-0912 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
   
   
   
@@ -129,7 +139,19 @@
   </header>
 
   <section class="post">
-    <h2 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h2>
+    <head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
+
+<h2 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h2>
 <p><strong>via Principle Component Analysis</strong></p>
 
 <p>In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.<br />
@@ -369,6 +391,26 @@ The goal of PCA can be interpreted as maximize the main diagonal (the covariance
 </section>
 
 <section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2020/08/PCA/";
+        this.page.identifier = "/2020/08/PCA/";
+    };
+
+    var disqus_shortname = 'natasumushi';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
   
   
   
