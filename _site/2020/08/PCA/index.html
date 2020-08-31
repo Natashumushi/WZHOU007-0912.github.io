@@ -152,7 +152,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
 
 <blockquote>
-  <p><img src="https://wzhou007-0912.github.io//assets/screenshot/output_19_1.png" alt="AltText" />
+  <p><img src="https://wzhou007-0912.github.io/assets/pcs.jpg" alt="PCA" />
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
 </blockquote>
 
@@ -353,7 +353,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data</li>
 <span class="n">X_test_std</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="2-constructing-the-covariance-matrix">2. Constructing the covariance matrix</h2>
+<h3 id="2-constructing-the-covariance-matrix">2. Constructing the covariance matrix</h3>
 <ul>
   <li>The covariance between two features x<sub>i</sub> and x<sub>j</sub> on population level can be calculated as:</li>
 </ul>
@@ -388,7 +388,7 @@ Note that variance is a measure of the “variability” of the data you have. W
 </span><span class="n">con_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">X_train_std</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h1 id="3-obtaining-the-eigenvalues-and-eigenvectors">3. Obtaining the eigenvalues and eigenvectors</h1>
+<h3 id="3-obtaining-the-eigenvalues-and-eigenvectors">3. Obtaining the eigenvalues and eigenvectors</h3>
 <p><strong>of the covariance matrix</strong></p>
 
 <ul>
@@ -418,13 +418,13 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
  0.1808613 ]
 </code></pre></div></div>
 
-<h1 id="4-sorting-the-eigenvalues">4. Sorting the eigenvalues</h1>
+<h3 id="4-sorting-the-eigenvalues">4. Sorting the eigenvalues</h3>
 <p><strong>by decreasing order to rank the eigenvectors</strong></p>
 
 <p>Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principle components) that contains most of the information(variance).<br />
 Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 
-<p>$\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}$</p>
+<script type="math/tex; mode=display">\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}</script>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">eigen_val</span><span class="p">)</span>
 <span class="n">history</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="o">/</span><span class="n">tot</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
@@ -443,7 +443,7 @@ Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 
 <p>We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.</p>
 
-<h1 id="5-select-k-eigenvectors">5. Select K eigenvectors</h1>
+<h3 id="5-select-k-eigenvectors">5. Select K eigenvectors</h3>
 <p><strong>which correspond to K largest eigenvalues</strong></p>
 
 <p>K is the dimensionality of the new feature subspace.</p>
@@ -454,7 +454,7 @@ Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 <span class="n">eigen_pair</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h1 id="6-construct-a-projection-matrix-w">6. Construct a projection matrix W</h1>
+<h3 id="6-construct-a-projection-matrix-w">6. Construct a projection matrix W</h3>
 <p><strong>from K eigenvectors</strong></p>
 
 <p>Here we let k = 2 for convinience.</p>
@@ -482,7 +482,7 @@ Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
  [-0.29669651  0.38022942]]
 </code></pre></div></div>
 
-<h1 id="7-transform-the-features-using-matrix-w">7. Transform the features using matrix W</h1>
+<h3 id="7-transform-the-features-using-matrix-w">7. Transform the features using matrix W</h3>
 <p><strong>to obtain the new K-dimensional feature subspace</strong></p>
 
 <p>$X^{‘} = XW $</p>

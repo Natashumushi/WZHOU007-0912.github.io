@@ -5,8 +5,8 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 16:09:30 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 16:09:30 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Aug 2020 16:17:42 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Aug 2020 16:17:42 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -18,7 +18,7 @@
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;&lt;img src=&quot;https://wzhou007-0912.github.io//assets/screenshot/output_19_1.png&quot; alt=&quot;AltText&quot; /&gt;
+  &lt;p&gt;&lt;img src=&quot;https://wzhou007-0912.github.io/assets/pcs.jpg&quot; alt=&quot;PCA&quot; /&gt;
 $x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -219,7 +219,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&lt;/li&
 &lt;span class=&quot;n&quot;&gt;X_test_std&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit_transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;2-constructing-the-covariance-matrix&quot;&gt;2. Constructing the covariance matrix&lt;/h2&gt;
+&lt;h3 id=&quot;2-constructing-the-covariance-matrix&quot;&gt;2. Constructing the covariance matrix&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;The covariance between two features x&lt;sub&gt;i&lt;/sub&gt; and x&lt;sub&gt;j&lt;/sub&gt; on population level can be calculated as:&lt;/li&gt;
 &lt;/ul&gt;
@@ -254,7 +254,7 @@ Note that variance is a measure of the “variability” of the data you have. W
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;con_mat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cov&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train_std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;3-obtaining-the-eigenvalues-and-eigenvectors&quot;&gt;3. Obtaining the eigenvalues and eigenvectors&lt;/h1&gt;
+&lt;h3 id=&quot;3-obtaining-the-eigenvalues-and-eigenvectors&quot;&gt;3. Obtaining the eigenvalues and eigenvectors&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;of the covariance matrix&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
@@ -284,13 +284,13 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
  0.1808613 ]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;4-sorting-the-eigenvalues&quot;&gt;4. Sorting the eigenvalues&lt;/h1&gt;
+&lt;h3 id=&quot;4-sorting-the-eigenvalues&quot;&gt;4. Sorting the eigenvalues&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;by decreasing order to rank the eigenvectors&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principle components) that contains most of the information(variance).&lt;br /&gt;
 Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigenvalues:&lt;/p&gt;
 
-&lt;p&gt;$\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}$&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}&lt;/script&gt;
 
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;tot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eigen_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;history&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt;
@@ -309,7 +309,7 @@ Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigen
 
 &lt;p&gt;We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.&lt;/p&gt;
 
-&lt;h1 id=&quot;5-select-k-eigenvectors&quot;&gt;5. Select K eigenvectors&lt;/h1&gt;
+&lt;h3 id=&quot;5-select-k-eigenvectors&quot;&gt;5. Select K eigenvectors&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;which correspond to K largest eigenvalues&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;K is the dimensionality of the new feature subspace.&lt;/p&gt;
@@ -320,7 +320,7 @@ Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigen
 &lt;span class=&quot;n&quot;&gt;eigen_pair&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;6-construct-a-projection-matrix-w&quot;&gt;6. Construct a projection matrix W&lt;/h1&gt;
+&lt;h3 id=&quot;6-construct-a-projection-matrix-w&quot;&gt;6. Construct a projection matrix W&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;from K eigenvectors&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Here we let k = 2 for convinience.&lt;/p&gt;
@@ -348,7 +348,7 @@ Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigen
  [-0.29669651  0.38022942]]
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;7-transform-the-features-using-matrix-w&quot;&gt;7. Transform the features using matrix W&lt;/h1&gt;
+&lt;h3 id=&quot;7-transform-the-features-using-matrix-w&quot;&gt;7. Transform the features using matrix W&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;to obtain the new K-dimensional feature subspace&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;$X^{‘} = XW $&lt;/p&gt;
