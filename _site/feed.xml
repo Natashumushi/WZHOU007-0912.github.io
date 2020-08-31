@@ -5,8 +5,8 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 17:08:59 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 17:08:59 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Aug 2020 17:13:13 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Aug 2020 17:13:13 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -305,7 +305,7 @@ Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigen
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Text(0.5, 0, 'Principle component index')
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/blob/master/PCA%20index.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/PCA%20index.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.&lt;/p&gt;
 
@@ -378,7 +378,7 @@ We can then visualize it in a 2-dimensional scatter plot.&lt;/li&gt;
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/blob/master/output_28_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/output_28_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;We can see that the data spread more on pc1 (the first principle component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.&lt;/li&gt;
@@ -441,7 +441,7 @@ We can then visualize it in a 2-dimensional scatter plot.&lt;/li&gt;
 &lt;span class=&quot;n&quot;&gt;plot_decision_regions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_train_pca_sk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/blob/master/output_36_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/output_36_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Now let’s plot the decision regions of the logistic regression on the transformed test dataset.&lt;/p&gt;
 
@@ -452,7 +452,7 @@ We can then visualize it in a 2-dimensional scatter plot.&lt;/li&gt;
 &lt;span class=&quot;n&quot;&gt;plot_decision_regions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X_test_pca_sk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;classifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/blob/master/output_38_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/output_38_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The result indicates that logistic regression performs quite well on this two-dimensional feature subspace.&lt;/p&gt;
 
