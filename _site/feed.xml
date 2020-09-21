@@ -5,12 +5,12 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 21 Sep 2020 21:53:37 +0800</pubDate>
-    <lastBuildDate>Mon, 21 Sep 2020 21:53:37 +0800</lastBuildDate>
+    <pubDate>Mon, 21 Sep 2020 21:55:30 +0800</pubDate>
+    <lastBuildDate>Mon, 21 Sep 2020 21:55:30 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>scRNA-seq experiment Computational Analysis</title>
+        <title>scRNA-seq Data Analysis</title>
         <description>&lt;h3 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h3&gt;
 &lt;p&gt;This kernel uses the data from &lt;a href=&quot;https://tabula-muris.ds.czbiohub.org/&quot;&gt;Tabula Muris&lt;/a&gt;, follows the course developed by &lt;a href=&quot;https://scrnaseq-course.cog.sanger.ac.uk/website/resources.html&quot;&gt;the Hemberg Lab&lt;/a&gt; and &lt;a href=&quot;https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html&quot;&gt;the Computational Biology team at the Chan Zuckerberg Initiative&lt;/a&gt; for data preprocessing, builds an Autoencoder (in Keras) + t-SNE for dimensionality reduction, then compares the performance of Kmeans and Agglomerative method in clustering, and finally discusses what makes each cluster different from other cells in the dataset (differential expression).&lt;/p&gt;
 

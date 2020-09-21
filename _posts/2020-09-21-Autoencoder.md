@@ -1,6 +1,6 @@
 ---
 layout: post
-title: scRNA-seq experiment Computational Analysis
+title: scRNA-seq Data Analysis
 date: 2020-09-21
 tags: Unsupervised Learning
 ---
