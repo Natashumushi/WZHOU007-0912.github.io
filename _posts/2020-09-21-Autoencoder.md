@@ -7,6 +7,7 @@ tags: Unsupervised Learning
 
 ### 0. Introduction  
 This kernel uses the data from [Tabula Muris](https://tabula-muris.ds.czbiohub.org/), follows the course developed by [the Hemberg Lab](https://scrnaseq-course.cog.sanger.ac.uk/website/resources.html) and [the Computational Biology team at the Chan Zuckerberg Initiative](https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html) for data preprocessing, builds an Autoencoder (in Keras) + t-SNE for dimensionality reduction, then compares the performance of Kmeans and Agglomerative method in clustering, and finally discusses what makes each cluster different from other cells in the dataset (differential expression).  
+![flowchart](https://github.com/WZHOU007-0912/images/raw/master/flowchart.png)
 
 
 ### 1. Reading the data  
@@ -164,7 +165,7 @@ for i in metadata_dataframe.columns.values:
 
 `AnnData` stands for "annotated data," and is the standard format used by the analysis library, `SCANPY`.  
 This data structure has four areas where we can store information:  
-![flowchart](https://github.com/WZHOU007-0912/images/raw/master/flowchart.png)
+![anndata](https://github.com/WZHOU007-0912/images/raw/master/anndata.svg)
 
 `AnnData.X` stores the count matrix  
 `AnnData.obs` stores metadata about the observations (cells)  

@@ -5,14 +5,15 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 21 Sep 2020 21:55:30 +0800</pubDate>
-    <lastBuildDate>Mon, 21 Sep 2020 21:55:30 +0800</lastBuildDate>
+    <pubDate>Mon, 21 Sep 2020 22:46:46 +0800</pubDate>
+    <lastBuildDate>Mon, 21 Sep 2020 22:46:46 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>scRNA-seq Data Analysis</title>
         <description>&lt;h3 id=&quot;0-introduction&quot;&gt;0. Introduction&lt;/h3&gt;
-&lt;p&gt;This kernel uses the data from &lt;a href=&quot;https://tabula-muris.ds.czbiohub.org/&quot;&gt;Tabula Muris&lt;/a&gt;, follows the course developed by &lt;a href=&quot;https://scrnaseq-course.cog.sanger.ac.uk/website/resources.html&quot;&gt;the Hemberg Lab&lt;/a&gt; and &lt;a href=&quot;https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html&quot;&gt;the Computational Biology team at the Chan Zuckerberg Initiative&lt;/a&gt; for data preprocessing, builds an Autoencoder (in Keras) + t-SNE for dimensionality reduction, then compares the performance of Kmeans and Agglomerative method in clustering, and finally discusses what makes each cluster different from other cells in the dataset (differential expression).&lt;/p&gt;
+&lt;p&gt;This kernel uses the data from &lt;a href=&quot;https://tabula-muris.ds.czbiohub.org/&quot;&gt;Tabula Muris&lt;/a&gt;, follows the course developed by &lt;a href=&quot;https://scrnaseq-course.cog.sanger.ac.uk/website/resources.html&quot;&gt;the Hemberg Lab&lt;/a&gt; and &lt;a href=&quot;https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html&quot;&gt;the Computational Biology team at the Chan Zuckerberg Initiative&lt;/a&gt; for data preprocessing, builds an Autoencoder (in Keras) + t-SNE for dimensionality reduction, then compares the performance of Kmeans and Agglomerative method in clustering, and finally discusses what makes each cluster different from other cells in the dataset (differential expression).&lt;br /&gt;
+&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/flowchart.png&quot; alt=&quot;flowchart&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;1-reading-the-data&quot;&gt;1. Reading the data&lt;/h3&gt;
 &lt;blockquote&gt;
@@ -165,7 +166,7 @@ Name: plate.barcode, dtype: int64
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AnnData&lt;/code&gt; stands for “annotated data,” and is the standard format used by the analysis library, &lt;code class=&quot;highlighter-rouge&quot;&gt;SCANPY&lt;/code&gt;.&lt;br /&gt;
 This data structure has four areas where we can store information:&lt;br /&gt;
-&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/flowchart.png&quot; alt=&quot;flowchart&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/anndata.svg&quot; alt=&quot;anndata&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AnnData.X&lt;/code&gt; stores the count matrix&lt;br /&gt;
 &lt;code class=&quot;highlighter-rouge&quot;&gt;AnnData.obs&lt;/code&gt; stores metadata about the observations (cells)&lt;br /&gt;
