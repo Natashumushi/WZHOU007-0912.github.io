@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+          inlineMath: [['$','$']]
+          }
+      });
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>scRNA-seq experiment Computational Analysis</title>
+  <meta name="description" content="0. IntroductionThis kernel uses the data from Tabula Muris, follows the course developed by the Hemberg Lab and the Computational Biology team at the Chan Zu...">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="scRNA-seq experiment Computational Analysis">
+  <meta name="twitter:description" content="0. IntroductionThis kernel uses the data from Tabula Muris, follows the course developed by the Hemberg Lab and the Computational Biology team at the Chan Zu...">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="scRNA-seq experiment Computational Analysis">
+  <meta property="og:description" content="0. IntroductionThis kernel uses the data from Tabula Muris, follows the course developed by the Hemberg Lab and the Computational Biology team at the Chan Zu...">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2020/09/Autoencoder/">
+  <link rel="alternate" type="application/rss+xml" title="Zhou Wei" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Zhou Wei 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Zhou Wei logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Zhou Wei" class="blog-button">Zhou Wei</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">My journey to data science 👧🏽</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">ta-da! welcome to my blog!</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/natasumushi" title="@natasumushi 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/WZHOU007-0912" title="@WZHOU007-0912 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:WZHOU007@e.ntu.edu.sg" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2020-09-21 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2020-09-21</time> &#8226; <span class="post-meta__tags tags">Unsupervised Learning</span>
+    </div>
+    <h1 class="post-title">scRNA-seq experiment Computational Analysis</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="0-introduction">0. Introduction</h3>
+<p>This kernel uses the data from <a href="https://tabula-muris.ds.czbiohub.org/">Tabula Muris</a>, follows the course developed by <a href="https://scrnaseq-course.cog.sanger.ac.uk/website/resources.html">the Hemberg Lab</a> and <a href="https://chanzuckerberg.github.io/scRNA-python-workshop/intro/about.html">the Computational Biology team at the Chan Zuckerberg Initiative</a> for data preprocessing, builds an Autoencoder (in Keras) + t-SNE for dimensionality reduction, then compares the performance of Kmeans and Agglomerative method in clustering, and finally discusses what makes each cluster different from other cells in the dataset (differential expression).</p>
+
+<h3 id="1-reading-the-data">1. Reading the data</h3>
+<blockquote>
+  <p>The Tabula Muris is a collaborative effort to profile every mouse tissue at a single-cell level.<br />
+The full dataset includes both high throughput but low-coverage 10X data and lower throughput but high-coverage Smartseq2 data.</p>
+</blockquote>
+
+<p>For this kernel, the Smartseq2 data from the mouse brain is used.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="n">count_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'.../data/brain_counts.csv'</span><span class="p">,</span>
+                              <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">count_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> 
+<span class="k">print</span><span class="p">(</span><span class="n">count_dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                       0610005C13Rik  0610007C21Rik  0610007L01Rik  \
+A1.B003290.3_38_F.1.1              0            125             16   
+A1.B003728.3_56_F.1.1              0              0              0   
+
+                       0610007N19Rik  0610007P08Rik  0610007P14Rik  \
+A1.B003290.3_38_F.1.1              0              0              0   
+A1.B003728.3_56_F.1.1              0              0            324   
+
+                       0610007P22Rik  0610008F07Rik  0610009B14Rik  \
+A1.B003290.3_38_F.1.1              0              0              0   
+A1.B003728.3_56_F.1.1              0              0              0   
+
+                       0610009B22Rik  ...  Zxdb  Zxdc  Zyg11a  Zyg11b  Zyx  \
+A1.B003290.3_38_F.1.1              0  ...     0     0       0       0    0   
+A1.B003728.3_56_F.1.1              0  ...     0     0       0       0    0   
+
+                       Zzef1  Zzz3  a  l7Rn6  zsGreen_transgene  
+A1.B003290.3_38_F.1.1      0     0  0     54                  0  
+A1.B003728.3_56_F.1.1      0     0  0      0                  0  
+
+[2 rows x 23433 columns]
+(3401, 23433)
+</code></pre></div></div>
+
+<p>The column names represent genes. <br />
+The row names represent unique cell identifiers that were assigned by the authors of the dataset.<br />
+We have 3401 cells and 23433 genes.</p>
+
+<h3 id="2-reading-the-metadata">2. Reading the metadata</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">metadata_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'.../data/brain_metadata.csv'</span><span class="p">,</span>
+                                <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">metadata_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">metadata_dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                        cell_ontology_class    subtissue mouse.sex mouse.id  \
+cell                                                                          
+A1.B003290.3_38_F.1.1             astrocyte     Striatum         F   3_38_F   
+A1.B003728.3_56_F.1.1             astrocyte     Striatum         F   3_56_F   
+A1.MAA000560.3_10_M.1.1     oligodendrocyte       Cortex         M   3_10_M   
+A1.MAA000564.3_10_M.1.1    endothelial cell     Striatum         M   3_10_M   
+A1.MAA000923.3_9_M.1.1            astrocyte  Hippocampus         M    3_9_M   
+
+                        plate.barcode  
+cell                                   
+A1.B003290.3_38_F.1.1         B003290  
+A1.B003728.3_56_F.1.1         B003728  
+A1.MAA000560.3_10_M.1.1     MAA000560  
+A1.MAA000564.3_10_M.1.1     MAA000564  
+A1.MAA000923.3_9_M.1.1      MAA000923  
+(3401, 5)
+</code></pre></div></div>
+
+<p>We have 5 columns of information about 3401 cells.<br />
+Now check out the number of times each cell appears in a label (column):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">metadata_dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">metadata_dataframe</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>oligodendrocyte                   1574
+endothelial cell                   715
+astrocyte                          432
+neuron                             281
+oligodendrocyte precursor cell     203
+brain pericyte                     156
+Bergmann glial cell                 40
+Name: cell_ontology_class, dtype: int64
+Cortex         1149
+Hippocampus     976
+Striatum        723
+Cerebellum      553
+Name: subtissue, dtype: int64
+M    2694
+F     707
+Name: mouse.sex, dtype: int64
+3_10_M    980
+3_9_M     871
+3_8_M     590
+3_38_F    355
+3_11_M    253
+3_39_F    241
+3_56_F    111
+Name: mouse.id, dtype: int64
+MAA000560    287
+MAA000926    263
+MAA000581    190
+MAA000944    184
+MAA000932    174
+MAA001894    147
+MAA000564    143
+MAA000942    136
+MAA000935    131
+MAA000941    125
+MAA000930    111
+MAA000923    108
+MAA000947    107
+B003290       98
+MAA000561     97
+MAA000615     95
+B003275       93
+MAA000641     67
+B003728       66
+MAA000940     63
+MAA001895     60
+MAA000563     57
+MAA000925     55
+B003277       52
+MAA000638     51
+MAA000902     40
+MAA000553     39
+MAA000424     39
+MAA000578     38
+MAA000928     36
+MAA000550     34
+MAA001845     33
+B001688       32
+B003274       27
+B000621       24
+MAA001854     23
+MAA001853     22
+B000404       21
+MAA000924     14
+MAA000538     10
+MAA001856      9
+Name: plate.barcode, dtype: int64
+</code></pre></div></div>
+
+<h3 id="3-building-an-anndata-object">3. Building an AnnData object</h3>
+
+<p><code class="highlighter-rouge">AnnData</code> stands for “annotated data,” and is the standard format used by the analysis library, <code class="highlighter-rouge">SCANPY</code>.<br />
+This data structure has four areas where we can store information:<br />
+<img src="https://github.com/WZHOU007-0912/images/raw/master/flowchart.png" alt="flowchart" /></p>
+
+<p><code class="highlighter-rouge">AnnData.X</code> stores the count matrix<br />
+<code class="highlighter-rouge">AnnData.obs</code> stores metadata about the observations (cells)<br />
+<code class="highlighter-rouge">AnnData.var</code> stores metadata about the variables (genes)<br />
+<code class="highlighter-rouge">AnnData.uns</code> stores any additional, unstructured information we decide to attach later</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="n">sc</span>
+
+<span class="n">adata</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">AnnData</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">count_dataframe</span><span class="p">,</span> <span class="n">obs</span> <span class="o">=</span> <span class="n">metadata_dataframe</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AnnData object with n_obs × n_vars = 3401 × 23433
+    obs: 'cell_ontology_class', 'subtissue', 'mouse.sex', 'mouse.id', 'plate.barcode'
+</code></pre></div></div>
+
+<p>Labeling spilke-ins:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">is_spike_in</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">number_of_spike_ins</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">gene_name</span> <span class="ow">in</span> <span class="n">adata</span><span class="o">.</span><span class="n">var_names</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s">'ERCC'</span> <span class="ow">in</span> <span class="n">gene_name</span><span class="p">:</span>
+        <span class="n">is_spike_in</span><span class="p">[</span><span class="n">gene_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span> 
+        <span class="c1"># record that we found a spike-in
+</span>        <span class="n">number_of_spike_ins</span> <span class="o">+=</span> <span class="mi">1</span> 
+        <span class="c1"># bump the counter
+</span>    <span class="k">else</span><span class="p">:</span>
+        <span class="n">is_spike_in</span><span class="p">[</span><span class="n">gene_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span> 
+        <span class="c1"># record that this was not a spike-in
+</span>        
+<span class="n">adata</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s">'ERCC'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">is_spike_in</span><span class="p">)</span> 
+<span class="c1"># because the index of adata.var and the keys of is_spike_in match, 
+# anndata will take care of matching them up
+</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'found this many spike ins: '</span><span class="p">,</span> <span class="n">number_of_spike_ins</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>found this many spike ins:  92
+</code></pre></div></div>
+
+<h3 id="4-quality-control">4. Quality control</h3>
+
+<h4 id="41-cell-filtering">4.1 Cell filtering</h4>
+
+<blockquote>
+  <p>One of the measures of cell quality is the <strong>ratio</strong> between ERCC spike-in RNAs and endogenous RNAs.<br />
+This ratio can be used to estimate the total amount of RNA in the captured cells.<br />
+<strong>Cells with a high level of spike-in RNAs had low starting amounts of RNA, likely due to the cell being dead or stressed which may result in the RNA being degraded.</strong></p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AnnData object with n_obs × n_vars = 3401 × 23433
+    obs: 'cell_ontology_class', 'subtissue', 'mouse.sex', 'mouse.id', 'plate.barcode'
+    var: 'ERCC'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># The calculate_qc_metrics function returns two dataframes: 
+# one containing quality control metrics about cells, 
+# and one containing metrics about genes. 
+</span><span class="n">qc</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">calculate_qc_metrics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">qc_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s">'ERCC'</span><span class="p">])</span>
+
+<span class="n">cell_qc_dataframe</span> <span class="o">=</span> <span class="n">qc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">gene_qc_dataframe</span> <span class="o">=</span> <span class="n">qc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                       n_genes_by_counts  log1p_n_genes_by_counts  \
+cell                                                                
+A1.B003290.3_38_F.1.1               3359                 8.119696   
+A1.B003728.3_56_F.1.1               1718                 7.449498   
+
+                       total_counts  log1p_total_counts  \
+cell                                                      
+A1.B003290.3_38_F.1.1      390075.0           12.874097   
+A1.B003728.3_56_F.1.1      776439.0           13.562474   
+
+                       pct_counts_in_top_50_genes  \
+cell                                                
+A1.B003290.3_38_F.1.1                   25.884766   
+A1.B003728.3_56_F.1.1                   43.051933   
+
+                       pct_counts_in_top_100_genes  \
+cell                                                 
+A1.B003290.3_38_F.1.1                    32.847017   
+A1.B003728.3_56_F.1.1                    52.912721   
+
+                       pct_counts_in_top_200_genes  \
+cell                                                 
+A1.B003290.3_38_F.1.1                    42.219573   
+A1.B003728.3_56_F.1.1                    65.313309   
+
+                       pct_counts_in_top_500_genes  total_counts_ERCC  \
+cell                                                                    
+A1.B003290.3_38_F.1.1                    59.472666            10201.0   
+A1.B003728.3_56_F.1.1                    87.315423            67351.0   
+
+                       log1p_total_counts_ERCC  pct_counts_ERCC  
+cell                                                             
+A1.B003290.3_38_F.1.1                 9.230339         2.615138  
+A1.B003728.3_56_F.1.1                11.117688         8.674345  
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               n_cells_by_counts  mean_counts  log1p_mean_counts  \
+0610005C13Rik                 28     0.118201           0.111721   
+0610007C21Rik               2399   206.211990           5.333742   
+
+               pct_dropout_by_counts  total_counts  log1p_total_counts  
+0610005C13Rik              99.176713         402.0            5.998937  
+0610007C21Rik              29.461923      701327.0           13.460731  
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">'w'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'k'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s">'pct_counts_ERCC'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'gold'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Percent counts ERCC'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'N cells'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/QC-cell.png" alt="cell filtering" /></p>
+
+<p>The majority of cells have less than 10% ERCC counts, <br />
+but there’s a long tail of cells that have very high spike-in counts; <strong>these are likely dead cells and should be removed</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">low_ERCC_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s">'pct_counts_ERCC'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">adata</span> <span class="o">=</span> <span class="n">adata</span><span class="p">[</span><span class="n">low_ERCC_mask</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>In addition to ensuring sufficient sequencing depth for each sample, we also want to make sure that the reads are distributed across the transcriptome. <br />
+Thus, we count the total number of unique genes detected in each sample.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">'w'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'k'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cell_qc_dataframe</span><span class="p">[</span><span class="s">'n_genes_by_counts'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'plum'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'N genes'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'N cells'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_25_1.png" alt="cell distribution" /></p>
+
+<blockquote>
+  <p>If detection rates were equal across the cells then the distribution should be approximately normal.</p>
+</blockquote>
+
+<p><strong>Thus we remove those cells in the tail of the distribution (fewer than ~1000 detected genes):</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_cells</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_genes</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Trying to set attribute `.obs` of view, copying.
+</code></pre></div></div>
+
+<h4 id="42-gene-filtering">4.2 Gene filtering</h4>
+
+<blockquote>
+  <p>A gene is defined as <strong>detectable</strong> if at least two cells contain more than 5 reads from the gene (however, the threshold strongly depends on the sequencing depth).</p>
+</blockquote>
+
+<p>It is typically a good idea to remove genes whose expression level is considered <strong>“undetectable”</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">'w'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'k'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="p">[</span><span class="s">'n_cells_by_counts'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'darkseagreen'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'N cells expressing &gt; 0'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'log(N genes)'</span><span class="p">)</span> <span class="c1"># for visual clarity
+</span><span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s">'log'</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_31_0.png" alt="genes filtering" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">figure</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s">'w'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'k'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">gene_qc_dataframe</span><span class="p">[</span><span class="s">'total_counts'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'mediumpurple'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Total counts'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'log(N genes)'</span><span class="p">)</span> <span class="c1"># for visual clarity
+</span><span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s">'log'</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_32_0.png" alt="genes filtering" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_cells</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_genes</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_counts</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="5--normalization">5.  Normalization</h3>
+
+<h4 id="51-normalizing-cell-library-size---cpm">5.1 Normalizing cell library size - CPM</h4>
+
+<blockquote>
+  <p>Library sizes vary for many reasons, including natural differences in cell size, variation of RNA capture.<br />
+While the volume of a cell is informative of a cell’s phenotype, there is much more variation in size due to technical factors, and so cells are commonly normalized to have comparable RNA content, becuase this is known to exclude much more technical than biological variation.</p>
+</blockquote>
+
+<blockquote>
+  <p>The simplest way to normalize this data is to convert it to <strong>counts per million</strong> (CPM) by dividing each row by a size factor (the sum of all counts in the row), then multiplying by 1,000,000.<br />
+Note that this method assumes that each cell originally contained the same amount of RNA.<br />
+A potential <strong>drawback of CPM</strong> is if your sample contains genes that are both very highly expressed and differentially expressed across the cells. In this case, the total molecules in the cell may depend of whether such genes are on/off in the cell and normalizing by total molecules may hide the differential expression of those genes and/or falsely create differential expression for the remaining genes.<br />
+One way to mitigate this is to <strong>exclude highly expressed genes</strong> from the size factor estimation.</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adata</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_total</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">target_sum</span> <span class="o">=</span> <span class="mf">1e6</span><span class="p">,</span> 
+                      <span class="n">exclude_highly_expressed</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="52-normalizing-gene-expression---centering-and-scaling">5.2 Normalizing gene expression - centering and scaling</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="6-dimension-reduction---autoencoders">6. Dimension reduction - Autoencoders</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AnnData object with n_obs × n_vars = 3191 × 18877
+    obs: 'cell_ontology_class', 'subtissue', 'mouse.sex', 'mouse.id', 'plate.barcode', 'n_genes'
+    var: 'ERCC', 'n_cells', 'n_counts', 'mean', 'std'
+    uns: 'log1p'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span> 
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Dropout</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span> 
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span><span class="p">,</span> <span class="n">Model</span> 
+<span class="kn">from</span> <span class="nn">keras</span> <span class="kn">import</span> <span class="n">regularizers</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"bottleneck"</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">35</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span>
+                <span class="n">activation</span><span class="o">=</span><span class="s">'elu'</span><span class="p">,</span>
+                <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span> <span class="o">=</span> <span class="s">'mean_squared_error'</span><span class="p">,</span> <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="n">lr</span> <span class="o">=</span> <span class="mf">0.0005</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span> <span class="mi">300</span><span class="p">,</span> 
+                   <span class="n">shuffle</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span> <span class="o">+</span> <span class="s">"Training Loss: "</span><span class="p">,</span> <span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Model Loss'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Loss'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Epoch'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_44_1.png" alt="loss" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="nb">input</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="s">'bottleneck'</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+<span class="n">bottleneck_representation</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+
+<span class="n">model_tsne_auto</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">n_components</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> 
+                       <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">perplexity</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> 
+                       <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">tsne_auto</span> <span class="o">=</span> <span class="n">model_tsne_auto</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">bottleneck_representation</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[t-SNE] Computing 151 nearest neighbors...
+[t-SNE] Indexed 3191 samples in 0.001s...
+[t-SNE] Computed neighbors for 3191 samples in 0.113s...
+[t-SNE] Computed conditional probabilities for sample 1000 / 3191
+[t-SNE] Computed conditional probabilities for sample 2000 / 3191
+[t-SNE] Computed conditional probabilities for sample 3000 / 3191
+[t-SNE] Computed conditional probabilities for sample 3191 / 3191
+[t-SNE] Mean sigma: 1.310199
+[t-SNE] KL divergence after 250 iterations with early exaggeration: 59.288960
+[t-SNE] KL divergence after 1000 iterations: 0.537335
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="n">colors</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="n">cmx</span>
+
+<span class="n">uniq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'cell_ontology_class'</span><span class="p">]))</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">uniq</span><span class="p">))</span>
+<span class="n">hot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">'tab20'</span><span class="p">)</span>
+<span class="n">cNorm</span>  <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">uniq</span><span class="p">))</span>
+<span class="n">scalarMap</span> <span class="o">=</span> <span class="n">cmx</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span> <span class="o">=</span> <span class="n">cNorm</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">hot</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">uniq</span><span class="p">)):</span>
+    <span class="n">indx</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'cell_ontology_class'</span><span class="p">]</span> <span class="o">==</span> <span class="n">uniq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">tsne_auto</span><span class="p">[</span><span class="n">indx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
+                <span class="n">tsne_auto</span><span class="p">[</span><span class="n">indx</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">scalarMap</span><span class="o">.</span><span class="n">to_rgba</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> 
+                <span class="n">label</span> <span class="o">=</span> <span class="n">uniq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Autoencoder'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">"Dimension 1"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">"Dimension 2"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_46_0.png" alt="t-SNE" /></p>
+
+<h3 id="7-clustering">7. Clustering</h3>
+
+<h4 id="71-kmeans-clustering">7.1 Kmeans clustering</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">km</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">km_fit</span> <span class="o">=</span> <span class="n">km</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tsne_auto</span><span class="p">)</span>
+<span class="n">km_labels</span> <span class="o">=</span> <span class="n">km_fit</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">tsne_auto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> 
+            <span class="n">tsne_auto</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> 
+            <span class="n">c</span> <span class="o">=</span> <span class="n">km_labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">float</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_49_1.png" alt="k-means" /></p>
+
+<p>performance evaluation:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+
+<span class="n">metrics</span><span class="o">.</span><span class="n">adjusted_rand_score</span><span class="p">(</span><span class="n">labels_true</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'cell_ontology_class'</span><span class="p">],</span> 
+                            <span class="n">labels_pred</span> <span class="o">=</span> <span class="n">km_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.7601204227996344
+</code></pre></div></div>
+
+<p>Since we have the knowledge of class assignments <code class="highlighter-rouge">adata.obs['cell_ontology_class']</code> and our clustering algorithm assignments of the same samples <code class="highlighter-rouge">labels_pred</code> (<code class="highlighter-rouge">km_labels</code>), we can use the <code class="highlighter-rouge">adjusted Rand index</code> function that measures the similarity of the two assignments, for which perfect labeling is scored 1.0 while bad  is close to 0.0.<br />
+We can see that the <code class="highlighter-rouge">adjusted Rand index</code> for Kmeans clustering is 0.76.</p>
+
+<h4 id="72-agglomerative-clustering">7.2 Agglomerative clustering</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+
+<span class="n">agg</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span><span class="n">n_clusters</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tsne_auto</span><span class="p">)</span>
+<span class="n">agg_labels</span> <span class="o">=</span> <span class="n">agg</span><span class="o">.</span><span class="n">labels_</span> 
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">tsne_auto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> 
+            <span class="n">tsne_auto</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> 
+            <span class="n">c</span> <span class="o">=</span> <span class="n">agg_labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">float</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_54_1.png" alt="agglomerate" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">metrics</span><span class="o">.</span><span class="n">adjusted_rand_score</span><span class="p">(</span><span class="n">labels_true</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'cell_ontology_class'</span><span class="p">],</span> 
+                            <span class="n">labels_pred</span> <span class="o">=</span> <span class="n">agg_labels</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.8391778928818092
+</code></pre></div></div>
+
+<p>Here we see that Agglomerative clustering does a better job of cell clustering than Kmeans with the score of 0.84.</p>
+
+<h3 id="8-differential-expression">8. Differential expression</h3>
+<blockquote>
+  <p>For well-defined cell types, we expect marker genes to show large differences in expression between the cell type of interest and the rest of the dataset, allowing us to use simple methods.</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">obs_names</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">adata</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">var_names</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">agg_labels</span>
+<span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span> <span class="o">=</span> <span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cell
+A1.B003290.3_38_F.1.1      2
+A1.B003728.3_56_F.1.1      3
+A1.MAA000560.3_10_M.1.1    0
+A1.MAA000564.3_10_M.1.1    1
+A1.MAA000923.3_9_M.1.1     3
+                          ..
+P9.MAA000926.3_9_M.1.1     2
+P9.MAA000930.3_8_M.1.1     3
+P9.MAA000932.3_11_M.1.1    1
+P9.MAA000935.3_8_M.1.1     0
+P9.MAA001894.3_39_F.1.1    3
+Name: agg, Length: 3191, dtype: object
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cluster3</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span> <span class="o">==</span> <span class="s">'3'</span><span class="p">]</span>
+<span class="n">notcluster3</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">adata</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s">'agg'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">'3'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Say we are interested in genes named <strong>Gja1</strong>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">astrocyte_marker</span> <span class="o">=</span> <span class="s">'Gja1'</span>
+<span class="n">cluster3_marker_exp</span> <span class="o">=</span> <span class="n">cluster3</span><span class="p">[</span><span class="n">astrocyte_marker</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">notcluster3_marker_exp</span> <span class="o">=</span> <span class="n">notcluster3</span><span class="p">[</span><span class="n">astrocyte_marker</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">cluster3_marker_exp</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+         <span class="n">color</span><span class="o">=</span><span class="s">'Mediumpurple'</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'Cluster 3'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">notcluster3_marker_exp</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+         <span class="n">color</span><span class="o">=</span><span class="s">'Deeppink'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'not Cluster 3'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'</span><span class="si">%</span><span class="s">s expression'</span><span class="o">%</span><span class="n">astrocyte_marker</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'N cells'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_63_0.png" alt="distribution" /></p>
+
+<h4 id="81-t-test">8.1 T-test</h4>
+<p>Since we expect the differences in expression to be relatively large for marker genes, we can use hypothesis testing methods. In our case, $\sigma$ for the population is unknown and t-test will be used in here. <br />
+$h_0$: The cluster 3 and non-cluster 3 populations had no true difference in mean expression<br />
+$h_1$: The difference in expression between cluster 3 population and non-cluster 3 is significant</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span>
+
+<span class="n">ttest</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">cluster3_marker_exp</span><span class="p">,</span> 
+          <span class="n">notcluster3_marker_exp</span><span class="p">,</span> 
+          <span class="n">equal_var</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+          <span class="n">nan_policy</span><span class="o">=</span><span class="s">'omit'</span><span class="p">)</span> 
+<span class="k">print</span><span class="p">(</span><span class="n">ttest</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ttest_indResult(statistic=10.360312783138038, pvalue=9.01980462938619e-23)
+</code></pre></div></div>
+
+<p>The result for p-value tells us that we reject the null hypothesis, meaning that we can not say that the distibution of <strong>Gja1’s expression</strong> in cluster 3 and in non-cluster 3 has no true difference.</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">Earlier</span>
+       <h2 class="post-list__post-title post-title"><a href="/2020/08/PCA/" title="link to Principal Component Analysis">Principal Component Analysis</a></h2>
+       <p class="excerpt">Unsupervised Dimentionality Reductionvia Principal Component AnalysisIn the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information....&hellip;</p>
+       <div class="post-list__meta"><time datetime="2020-08-30 00:00:00 +0800" class="post-list__meta--date date">2020-08-30</time> &#8226; <span class="post-list__meta--tags tags">Unsupervised Learning</span><a class="btn-border-small" href=/2020/08/PCA/>Read more</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2020/09/Autoencoder/";
+        this.page.identifier = "/2020/09/Autoencoder/";
+    };
+
+    var disqus_shortname = 'natasumushi';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2020-09-21 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2020</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+  
+    
+  </body>
+
+</html>
