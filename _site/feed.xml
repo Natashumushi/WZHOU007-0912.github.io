@@ -5,25 +5,25 @@
     <description>ta-da! welcome to my blog!</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 31 Aug 2020 17:13:47 +0800</pubDate>
-    <lastBuildDate>Mon, 31 Aug 2020 17:13:47 +0800</lastBuildDate>
+    <pubDate>Mon, 07 Sep 2020 23:41:57 +0800</pubDate>
+    <lastBuildDate>Mon, 07 Sep 2020 23:41:57 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
-        <title>Principle Component Analysis</title>
+        <title>Principal Component Analysis</title>
         <description>&lt;h2 id=&quot;unsupervised-dimentionality-reduction&quot;&gt;Unsupervised Dimentionality Reduction&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;via Principle Component Analysis&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;via Principal Component Analysis&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.&lt;br /&gt;
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/pca.jpg&quot; alt=&quot;PCA Index&quot; /&gt;
-$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.&lt;/p&gt;
+$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principal components.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;strong&gt;Principle Component Analysis (PCA)&lt;/strong&gt; aims to find the &lt;em&gt;directions&lt;/em&gt; of &lt;strong&gt;maximum variance&lt;/strong&gt; in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.&lt;br /&gt;
-The orthogonal axes (principle components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are &lt;strong&gt;orthogonal&lt;/strong&gt; to each other.&lt;br /&gt;
+&lt;p&gt;&lt;strong&gt;Principal Component Analysis (PCA)&lt;/strong&gt; aims to find the &lt;em&gt;directions&lt;/em&gt; of &lt;strong&gt;maximum variance&lt;/strong&gt; in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.&lt;br /&gt;
+The orthogonal axes (principal components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are &lt;strong&gt;orthogonal&lt;/strong&gt; to each other.&lt;br /&gt;
 (&lt;em&gt;orthogonal means uncorrelated&lt;/em&gt;)&lt;/p&gt;
 
 &lt;ul&gt;
@@ -53,7 +53,7 @@ for: A = \begin{bmatrix} a_1 &amp; a_2\\ b_1 &amp; b_2 \end{bmatrix}, {A^T}= \be
 
 &lt;p&gt;Then $A$ is an orthogonal matrix.&lt;/p&gt;
 
-&lt;h2 id=&quot;extracting-the-principle-components-step-by-step&quot;&gt;Extracting the principle components step by step&lt;/h2&gt;
+&lt;h2 id=&quot;extracting-the-principal-components-step-by-step&quot;&gt;Extracting the principal components step by step&lt;/h2&gt;
 
 &lt;h3 id=&quot;1-standardizing-the-data&quot;&gt;1. Standardizing the data&lt;/h3&gt;
 &lt;ul&gt;
@@ -242,7 +242,7 @@ The goal of PCA can be interpreted as maximize &lt;strong&gt;the main diagonal&l
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;&lt;strong&gt;Then why do we need to maximimze the variance?&lt;/strong&gt;&lt;br /&gt;
-Note that variance is a measure of the “variability” of the data you have. When you extract the features from your dataset, you would want them to account for the most variability possible: hence the search for maximum variance, so that the &lt;em&gt;principle components&lt;/em&gt; collect the most “uniqueness” from the data set.&lt;/p&gt;
+Note that variance is a measure of the “variability” of the data you have. When you extract the features from your dataset, you would want them to account for the most variability possible: hence the search for maximum variance, so that the &lt;em&gt;principal components&lt;/em&gt; collect the most “uniqueness” from the data set.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -270,7 +270,7 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
  0 &amp; 0 &amp; 0 &amp;... &amp; \lambda_n
 \end{bmatrix} %]]&gt;&lt;/script&gt;
 
-    &lt;p&gt;where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principle components (the direction of maximum variance).&lt;/p&gt;
+    &lt;p&gt;where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principal components (the direction of maximum variance).&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -287,7 +287,7 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
 &lt;h3 id=&quot;4-sorting-the-eigenvalues&quot;&gt;4. Sorting the eigenvalues&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;by decreasing order to rank the eigenvectors&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principle components) that contains most of the information(variance).&lt;br /&gt;
+&lt;p&gt;Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principal components) that contains most of the information(variance).&lt;br /&gt;
 Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigenvalues:&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}&lt;/script&gt;
@@ -299,15 +299,15 @@ Now let’s plot the &lt;em&gt;variance explained ratios&lt;/em&gt; of the eigen
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;history&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;align&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'center'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;color&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'hotpink'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Explained variance ratio'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Principle component index'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Principal component index'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Text(0.5, 0, 'Principle component index')
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Text(0.5, 0, 'Principal component index')
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/PCA%20index.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.&lt;/p&gt;
+&lt;p&gt;We can see that the first two principal components combined to explain almost 60% of the variance in the dataset.&lt;/p&gt;
 
 &lt;h3 id=&quot;5-select-k-eigenvectors&quot;&gt;5. Select K eigenvectors&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;which correspond to K largest eigenvalues&lt;/strong&gt;&lt;/p&gt;
@@ -381,7 +381,7 @@ We can then visualize it in a 2-dimensional scatter plot.&lt;/li&gt;
 &lt;p&gt;&lt;img src=&quot;https://github.com/WZHOU007-0912/images/raw/master/output_28_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;We can see that the data spread more on pc1 (the first principle component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.&lt;/li&gt;
+  &lt;li&gt;We can see that the data spread more on pc1 (the first principal component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;

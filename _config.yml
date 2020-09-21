@@ -28,9 +28,9 @@ blog_button:
     description: Visit blog
 
 # Navigation buttons in the front page.
-#nav:
-   # - {title: Projects, description: My Projects, url: 'http://project.onevcat.com'}
-    # - {title: Another Button, description: A button, url: 'http://example.com'}
+# nav:
+#    - {title: Random Pieces, description: Random Pieces, url: 'https://github.com/WZHOU007-0912/pieces.io/blob/master/0828.jpg'}
+    #- {title: Another Button, description: A button, url: 'http://example.com'}
 
 # Pagination
 plugins: [jekyll-paginate]

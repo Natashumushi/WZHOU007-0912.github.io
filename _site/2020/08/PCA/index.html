@@ -15,17 +15,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Principle Component Analysis</title>
-  <meta name="description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <title>Principal Component Analysis</title>
+  <meta name="description" content="Unsupervised Dimentionality Reductionvia Principal Component Analysis">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Principle Component Analysis">
-  <meta name="twitter:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta name="twitter:title" content="Principal Component Analysis">
+  <meta name="twitter:description" content="Unsupervised Dimentionality Reductionvia Principal Component Analysis">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Principle Component Analysis">
-  <meta property="og:description" content="Unsupervised Dimentionality Reductionvia Principle Component Analysis">
+  <meta property="og:title" content="Principal Component Analysis">
+  <meta property="og:description" content="Unsupervised Dimentionality Reductionvia Principal Component Analysis">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -70,6 +70,8 @@
             <nav class="cover-navigation cover-navigation--primary">
               <ul class="navigation">
                 <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="http://project.onevcat.com" target="_blank" title="My Projects">Projects</a></li>
                 
               </ul>
             </nav>
@@ -141,23 +143,23 @@
     <div class="post-meta">
       <time datetime="2020-08-30 00:00:00 +0800" itemprop="datePublished" class="post-meta__date date">2020-08-30</time> &#8226; <span class="post-meta__tags tags">Unsupervised Learning</span>
     </div>
-    <h1 class="post-title">Principle Component Analysis</h1>
+    <h1 class="post-title">Principal Component Analysis</h1>
   </header>
 
   <section class="post">
     <h2 id="unsupervised-dimentionality-reduction">Unsupervised Dimentionality Reduction</h2>
-<p><strong>via Principle Component Analysis</strong></p>
+<p><strong>via Principal Component Analysis</strong></p>
 
 <p>In the context of dimensionality reduction, feature extraction can be understood as an approach to data compression with the goal of maintaining most of the relevant information.<br />
 Feature extraction is not only used to improve storage space or the computational efficiency of the learning algorithm, but can also improve the predictive performance by reducing the curse of dimensionality—especially if we are working with non-regularized models.</p>
 
 <blockquote>
   <p><img src="https://github.com/WZHOU007-0912/images/raw/master/pca.jpg" alt="PCA Index" />
-$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principle components.</p>
+$x_1$,$x_2$ are original feature axes, $pc_1$,$pc_2$ are the principal components.</p>
 </blockquote>
 
-<p><strong>Principle Component Analysis (PCA)</strong> aims to find the <em>directions</em> of <strong>maximum variance</strong> in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.<br />
-The orthogonal axes (principle components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are <strong>orthogonal</strong> to each other.<br />
+<p><strong>Principal Component Analysis (PCA)</strong> aims to find the <em>directions</em> of <strong>maximum variance</strong> in high dimensional data and projects it onto a new subspace with fewer dimensions than original one.<br />
+The orthogonal axes (principal components) of the new subspace can be interpreted as the directions of maximum given the constraints that new features are <strong>orthogonal</strong> to each other.<br />
 (<em>orthogonal means uncorrelated</em>)</p>
 
 <ul>
@@ -187,7 +189,7 @@ for: A = \begin{bmatrix} a_1 & a_2\\ b_1 & b_2 \end{bmatrix}, {A^T}= \begin{bmat
 
 <p>Then $A$ is an orthogonal matrix.</p>
 
-<h2 id="extracting-the-principle-components-step-by-step">Extracting the principle components step by step</h2>
+<h2 id="extracting-the-principal-components-step-by-step">Extracting the principal components step by step</h2>
 
 <h3 id="1-standardizing-the-data">1. Standardizing the data</h3>
 <ul>
@@ -376,7 +378,7 @@ The goal of PCA can be interpreted as maximize <strong>the main diagonal</strong
   </li>
   <li>
     <p><strong>Then why do we need to maximimze the variance?</strong><br />
-Note that variance is a measure of the “variability” of the data you have. When you extract the features from your dataset, you would want them to account for the most variability possible: hence the search for maximum variance, so that the <em>principle components</em> collect the most “uniqueness” from the data set.</p>
+Note that variance is a measure of the “variability” of the data you have. When you extract the features from your dataset, you would want them to account for the most variability possible: hence the search for maximum variance, so that the <em>principal components</em> collect the most “uniqueness” from the data set.</p>
   </li>
 </ul>
 
@@ -404,7 +406,7 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
  0 & 0 & 0 &... & \lambda_n
 \end{bmatrix} %]]></script>
 
-    <p>where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principle components (the direction of maximum variance).</p>
+    <p>where $\lambda_i$ is the eigenvalue (a scalar) that defines the magnitude of the eigenvector. And eigenvectors represent the principal components (the direction of maximum variance).</p>
   </li>
 </ul>
 
@@ -421,7 +423,7 @@ When you calculating the eigenvalues, you are actually trying to find a diagonal
 <h3 id="4-sorting-the-eigenvalues">4. Sorting the eigenvalues</h3>
 <p><strong>by decreasing order to rank the eigenvectors</strong></p>
 
-<p>Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principle components) that contains most of the information(variance).<br />
+<p>Since we want to decrease the dimensionality of our dataset by compressing it into new feature subspace, we only select the subset of the eigenvectors(principal components) that contains most of the information(variance).<br />
 Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 
 <script type="math/tex; mode=display">\frac{\lambda_i}{\sum_{i=1}^{n}\lambda_i}</script>
@@ -433,15 +435,15 @@ Now let’s plot the <em>variance explained ratios</em> of the eigenvalues:</p>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">14</span><span class="p">),</span><span class="n">history</span><span class="p">,</span> <span class="n">align</span> <span class="o">=</span> <span class="s">'center'</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">'hotpink'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Explained variance ratio'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Principle component index'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Principal component index'</span><span class="p">)</span>
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Text(0.5, 0, 'Principle component index')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Text(0.5, 0, 'Principal component index')
 </code></pre></div></div>
 
 <p><img src="https://github.com/WZHOU007-0912/images/raw/master/PCA%20index.png" alt="" /></p>
 
-<p>We can see that the first two principle components combined to explain almost 60% of the variance in the dataset.</p>
+<p>We can see that the first two principal components combined to explain almost 60% of the variance in the dataset.</p>
 
 <h3 id="5-select-k-eigenvectors">5. Select K eigenvectors</h3>
 <p><strong>which correspond to K largest eigenvalues</strong></p>
@@ -515,7 +517,7 @@ We can then visualize it in a 2-dimensional scatter plot.</li>
 <p><img src="https://github.com/WZHOU007-0912/images/raw/master/output_28_0.png" alt="" /></p>
 
 <ul>
-  <li>We can see that the data spread more on pc1 (the first principle component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.</li>
+  <li>We can see that the data spread more on pc1 (the first principal component) than pc2, which is consistent with the variance explained ratios that we’ve calculated in section 4.</li>
 </ul>
 
 <hr />
@@ -638,7 +640,7 @@ We can then visualize it in a 2-dimensional scatter plot.</li>
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2020-08-31 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2020-09-07 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
         <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2020</span>
     </footer>
 </section>
